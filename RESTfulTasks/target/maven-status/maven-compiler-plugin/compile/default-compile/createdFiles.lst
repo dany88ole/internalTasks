@@ -1,0 +1,10 @@
+com\internal\tasks\clients\ClientTask1.class
+com\internal\tasks\util\InitDatabase.class
+com\internal\tasks\util\ResponseRestFulWSDeserializer.class
+com\internal\tasks\beans\ResponseRestFulWS.class
+com\internal\tasks\dao\ResponseRestFulWSDAO.class
+com\internal\tasks\clients\ClientTask3.class
+com\internal\tasks\util\HibernateUtil.class
+com\internal\tasks\service\TasksService$1.class
+com\internal\tasks\service\TasksService.class
+com\internal\tasks\clients\ClientTask2.class
