@@ -1,6 +1,7 @@
 package com.internal.tasks.service;
 
 import java.lang.reflect.Type;
+import java.net.URLDecoder;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,14 +35,19 @@ public class TasksService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/task1POST")
 	public Response task1POST(String input) {
-
 		ResponseRestFulWS output = new ResponseRestFulWS();
 		output.setName(input);
 		output.setTime(getSystemStringDate());
 
-		output = dao.save(output);
-		System.out.println("******* PERSISTED *******");
+		try {
 
+			output = dao.save(output);
+
+		} catch (Exception sqlEx) {
+			return Response.status(HttpStatus.SC_CONFLICT).entity(sqlEx.getMessage()).build();
+		}
+
+		System.out.println("******* PERSISTED *******");
 		return Response.status(HttpStatus.SC_OK).entity(convertToJson(output)).build();
 	}
 
@@ -53,40 +59,44 @@ public class TasksService {
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(ResponseRestFulWS.class, new ResponseRestFulWSDeserializer());
 		Gson gson = builder.create();
-		Type type = new TypeToken<List<ResponseRestFulWS>>() {
-		}.getType();
+		Type type = new TypeToken<List<ResponseRestFulWS>>() {}.getType();
 
 		// JSON string to Collection
-		List<ResponseRestFulWS> collection = gson.fromJson(inputJson, type);
+		List<ResponseRestFulWS> collection = gson.fromJson(URLDecoder.decode(inputJson,"UTF-8"), type);
 
-		collection = dao.saveCollection(collection);
+		try {
+			collection = dao.saveCollection(collection);
+
+		} catch (Exception sqlEx) {
+			return Response.status(HttpStatus.SC_CONFLICT).entity(sqlEx.getMessage()).build();
+		}
+		
 		System.out.println("******* PERSISTED *******");
-
 		return Response.status(HttpStatus.SC_OK).entity("DATA RECEIVED CORRECTLY").build();
 	}
-	
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/task3GET/{name}")
 	public Response task3GET(@PathParam("name") String name) throws Exception {
-		
+
 		// Retrive data from DB
-		ResponseRestFulWS  item = dao.read(name);
+		ResponseRestFulWS item = dao.read(name);
 		System.out.println("******* RETRIVED *******");
-		
+
 		return Response.status(HttpStatus.SC_OK).entity(convertToJson(item)).build();
 	}
 
+	
 	private String getSystemStringDate() {
 
 		Date utilDate = new Date();
 		Timestamp sq = new Timestamp(utilDate.getTime());
 		SimpleDateFormat convertedDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-		
+
 		return convertedDate.format(sq);
 	}
-	
+
 	private static String convertToJson(ResponseRestFulWS item) {
 		Gson gson = new Gson();
 		// Convert to Json

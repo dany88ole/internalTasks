@@ -21,7 +21,12 @@ public class ClientTask1 {
 					.post(ClientResponse.class, "DANILO");
 
 			if (response.getStatus() != HttpStatus.SC_OK) {
-				throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+
+				if (response.getStatus() == HttpStatus.SC_CONFLICT) {
+					throw new RuntimeException("DUPLICATE NAME INTO DB - VIOLATE CONSTRAINT");
+				} else {
+					throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+				}
 			}
 
 			String output = response.getEntity(String.class);

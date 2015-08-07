@@ -1,48 +1,38 @@
 package com.internal.tasks.clients;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URLEncoder;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.api.json.JSONConfiguration;
 
 public class ClientTask3 {
 
 	public static void main(String[] args) {
 		try {
 
-			DefaultHttpClient httpClient = new DefaultHttpClient();
-			HttpGet getRequest = new HttpGet("http://localhost:8080/RESTfulTasks/rest/tasks/task3GET/"
-					+ URLEncoder.encode("PERSON0", "UTF-8"));
-			getRequest.addHeader("accept", "application/json");
+			ClientConfig clientConfig = new DefaultClientConfig();
+			clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
+			Client client = Client.create(clientConfig);
+			WebResource webResource = client.resource(
+					"http://localhost:8080/RESTfulTasks/rest/tasks/task3GET/" + URLEncoder.encode("DANILO", "UTF-8"));
+			ClientResponse response = webResource.accept("application/json").type("application/json")
+					.get(ClientResponse.class);
 
-			HttpResponse response = httpClient.execute(getRequest);
-
-			if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
-				throw new RuntimeException("Failed : HTTP error code : " + response.getStatusLine().getStatusCode());
+			if (response.getStatus() != HttpStatus.SC_OK) {
+				throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
 			}
 
-			BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
-
-			String output;
 			System.out.println("Output from Server ....");
-			while ((output = br.readLine()) != null) {
-				System.out.println(output);
-			}
+			String output = response.getEntity(String.class);
+			System.out.println(output);
 
-			httpClient.getConnectionManager().shutdown();
-
-		} catch (ClientProtocolException e) {
-
-			e.printStackTrace();
-
-		} catch (IOException e) {
-
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
