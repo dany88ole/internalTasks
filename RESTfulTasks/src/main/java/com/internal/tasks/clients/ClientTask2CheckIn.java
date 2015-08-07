@@ -7,7 +7,8 @@ import java.util.List;
 import org.apache.http.HttpStatus;
 
 import com.google.gson.Gson;
-import com.internal.tasks.beans.ResponseRestFulWS;
+import com.internal.tasks.beans.Hotel;
+import com.internal.tasks.util.JsonConverter;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -15,18 +16,18 @@ import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.json.JSONConfiguration;
 
-public class ClientTask2 {
+public class ClientTask2CheckIn {
 
 	public static void main(String[] args) {
 		try {
 
-			String jsonCollection = convertFromColletctionToJson();
-			System.out.println("SENT:/n"+jsonCollection);
+			String jsonCollection = JsonConverter.convertToJson(getCollection());
+			System.out.println("SENT:\n"+jsonCollection);
 			
 			ClientConfig clientConfig = new DefaultClientConfig();
 			clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
 			Client client = Client.create(clientConfig);
-			WebResource webResource = client.resource("http://localhost:8080/RESTfulTasks/rest/tasks/task2GET/"+ URLEncoder.encode(jsonCollection, "UTF-8"));
+			WebResource webResource = client.resource("http://localhost:8080/RESTfulTasks/rest/tasks/task2CheckIn/"+ URLEncoder.encode(jsonCollection, "UTF-8"));
 			ClientResponse response = webResource.accept("application/json").type("application/json").get(ClientResponse.class);
 
 			if (response.getStatus() != HttpStatus.SC_OK) {
@@ -47,24 +48,21 @@ public class ClientTask2 {
 
 	}
 
-	private static String convertFromColletctionToJson() {
-		Gson gson = new Gson();
-		// Convert to Json
-		return gson.toJson(getCollection());
-	}
+	
 
-	private static List<ResponseRestFulWS> getCollection() {
-		List<ResponseRestFulWS> collection = new ArrayList<ResponseRestFulWS>();
+	private static List<Hotel> getCollection() {
+		List<Hotel> collection = new ArrayList<Hotel>();
 		populateCollection(collection);
 		return collection;
 	}
 
-	private static void populateCollection(List<ResponseRestFulWS> input) {
+	private static void populateCollection(List<Hotel> input) {
 
 		for (int i = 0; i < 3; i++) {
-			ResponseRestFulWS temp = new ResponseRestFulWS();
-			temp.setName("SECOND" + i);
+			Hotel temp = new Hotel();
+			temp.setName("CLIENT" + i);
 			temp.setTime("1" + i + i + i + "-1" + i + "-1" + i + "T2" + i + ":" + i + i + ":" + i + i);
+			temp.setOperation("IN");
 			input.add(temp);
 		}
 	}

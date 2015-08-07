@@ -1,28 +1,41 @@
 package com.internal.tasks.tests;
 
+import static ch.lambdaj.Lambda.on;
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItems;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpStatus;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.google.gson.Gson;
-import com.internal.tasks.beans.ResponseRestFulWS;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.internal.tasks.beans.Hotel;
+import com.internal.tasks.dao.HotelDao;
+import com.internal.tasks.util.HotelDeserializer;
+import com.internal.tasks.util.JsonConverter;
 import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.response.Response;
+
+import ch.lambdaj.Lambda;
 
 public class RESTFulTasksTest {
 
-	//value TEST
-	private String name = "TEST";
-	
-	
+	// value TEST
+	private String name = "JUNIT";
+
+	private HotelDao hotelDao = new HotelDao();
+
 	@Before
 	public void setup() {
 		RestAssured.baseURI = "http://localhost";
@@ -30,55 +43,114 @@ public class RESTFulTasksTest {
 		RestAssured.basePath = "/RESTfulTasks/rest/tasks/";
 	}
 
-//	@Test //inserts name=TEST into DB 
-	public void task1POST() {
-		given()
-		.contentType("application/json")
-		.body(name)
-		.then()
-		.statusCode(HttpStatus.SC_OK)
-		.body("name", equalTo("TEST"))
-		.when()
-		.post("task1POST");
+	// @Test
+	public void task1CheckIn() {
+		given().contentType("application/json").body(name).then().statusCode(HttpStatus.SC_OK).when()
+				.post("task1CheckIn");
+
+		List<Hotel> result = hotelDao.read(name, "IN");
+
+		System.out.println(result.size());
+		Assert.assertFalse(result.isEmpty());
 	}
 
-	@Test //persists a collection sent in JSON  
-	public void task2GET() throws UnsupportedEncodingException{
-		given()
-		.contentType("application/json")
-		.accept("application/json")
-		.then()
-		.statusCode(HttpStatus.SC_OK)
-		.when()
-		.get("task2GET/"+URLEncoder.encode(createMockCollectionJson(),"UTF-8"));
+	// @Test
+	public void task1CheckOut() {
+		given().contentType("application/json").body(name).then().statusCode(HttpStatus.SC_OK).when()
+				.post("task1CheckOut");
+
+		List<Hotel> result = hotelDao.read(name, "OUT");
+
+		System.out.println(result.size());
+		Assert.assertFalse(result.isEmpty());
 	}
 
-//	@Test // retrives record from DB by name
-	public void task3GET() {
+	// @Test
+	public void task2CheckIn() throws UnsupportedEncodingException {
+		String inputJson = createMockCollectionJson("IN");
 
-		given()
-		.contentType("application/json")
-		.then()
-		.body("name", equalTo(name))
-		.statusCode(HttpStatus.SC_OK)
-		.when()
-		.get("task3GET/"+name);
+		Response response = given().contentType("application/json").accept("application/json").then()
+				.statusCode(HttpStatus.SC_OK).when().get("task2CheckIn/" + URLEncoder.encode(inputJson, "UTF-8"));
+
+		List<Hotel> list = JsonConverter.convertFromJson(response.asString());
+
+		List<Long> ids = Lambda.extract(list, on(Hotel.class).getName_id());
+
+		List<Hotel> result = hotelDao.readListById(ids, "IN");
+
+		System.out.println(result.size());
+		Assert.assertFalse(result.isEmpty() && result.size() != 3);
 	}
 
-	
-	private String createMockCollectionJson() {
-		List<ResponseRestFulWS> input = new ArrayList<ResponseRestFulWS>();
+	// @Test
+	public void task2CheckOut() throws UnsupportedEncodingException {
+		String inputJson = createMockCollectionJson("OUT");
+
+		Response response = given().contentType("application/json").accept("application/json").then()
+				.statusCode(HttpStatus.SC_OK).when().get("task2CheckOut/" + URLEncoder.encode(inputJson, "UTF-8"));
+
+		List<Hotel> list = JsonConverter.convertFromJson(response.asString());
+
+		List<Long> ids = Lambda.extract(list, on(Hotel.class).getName_id());
+
+		List<Hotel> result = hotelDao.readListById(ids, "OUT");
+
+		System.out.println(result.size());
+		Assert.assertFalse(result.isEmpty() && result.size() != 3);
+
+	}
+
+	@Test
+	public void task3CheckIn() throws JsonSyntaxException, UnsupportedEncodingException {
+		Response response = given().contentType("application/json").then().body("name", equalTo(name))
+				.statusCode(HttpStatus.SC_OK).when().get("task3CheckIn/" + URLEncoder.encode(name + "1","UTF-8"));
+
+		List<Hotel> list = JsonConverter.convertFromJson(response.asString());
 		
+		List<String> names = Lambda.extract(list, on(Hotel.class).getName());
+
+		List<Hotel> result = hotelDao.readListByName(names, "IN");
+
+		System.out.println(result.size());
+//		Assert.assertFalse(result.isEmpty());
+
+	}
+
+//	@Test
+	public void task3CheckOut() throws JsonSyntaxException, UnsupportedEncodingException {
+		Response response = given().contentType("application/json").then().body("name", equalTo(name))
+				.statusCode(HttpStatus.SC_OK).when().get("task3CheckOut/" + name + "1");
+
+		List<Hotel> list = fromJson(response.asString());
+
+	}
+
+	private List<Hotel> fromJson(String input) throws JsonSyntaxException, UnsupportedEncodingException {
+
+		GsonBuilder builder = new GsonBuilder();
+		builder.registerTypeAdapter(Hotel.class, new HotelDeserializer());
+		Gson gson = builder.create();
+		Type type = new TypeToken<List<Hotel>>() {
+		}.getType();
+
+		// JSON string to Collection
+		return gson.fromJson(URLDecoder.decode(input, "UTF-8"), type);
+	}
+
+	private String createMockCollectionJson(String operation) {
+		List<Hotel> input = new ArrayList<Hotel>();
+
 		for (int i = 0; i < 3; i++) {
-			ResponseRestFulWS temp = new ResponseRestFulWS();
+			Hotel temp = new Hotel();
 			temp.setName(name + i);
 			temp.setTime("1" + i + i + i + "-1" + i + "-1" + i + "T2" + i + ":" + i + i + ":" + i + i);
+			temp.setOperation(operation);
 			input.add(temp);
 		}
 		return convertToJson(input);
 	}
 
-	private static String convertToJson(List<ResponseRestFulWS> item) {
+	private static String convertToJson(List<Hotel> item) {
 		Gson gson = new Gson();
 		// Convert to Json
 		return gson.toJson(item);
