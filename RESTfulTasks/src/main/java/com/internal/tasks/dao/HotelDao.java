@@ -46,7 +46,7 @@ public class HotelDao {
 		
 		Criteria criteria = session.createCriteria(Hotel.class);
 		
-		List<Hotel> item = (List<Hotel>) criteria.add(Restrictions.in("name",names)).list();
+		List<Hotel> item = (List<Hotel>) criteria.add(Restrictions.and(Restrictions.in("name",names),Restrictions.eq("operation", operation))).list();
 		
 		session.close();
 		

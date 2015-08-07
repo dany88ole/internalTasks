@@ -82,7 +82,7 @@ public class RESTFulTasksTest {
 		Assert.assertFalse(result.isEmpty() && result.size() != 3);
 	}
 
-	// @Test
+//	@Test
 	public void task2CheckOut() throws UnsupportedEncodingException {
 		String inputJson = createMockCollectionJson("OUT");
 
@@ -100,10 +100,10 @@ public class RESTFulTasksTest {
 
 	}
 
-	@Test
-	public void task3CheckIn() throws JsonSyntaxException, UnsupportedEncodingException {
-		Response response = given().contentType("application/json").then().body("name", equalTo(name))
-				.statusCode(HttpStatus.SC_OK).when().get("task3CheckIn/" + URLEncoder.encode(name + "1","UTF-8"));
+//	@Test
+	public void task3CheckIn() throws UnsupportedEncodingException {
+		Response response = given().contentType("application/json").accept("application/json").then()
+				.statusCode(HttpStatus.SC_OK).when().get("task3CheckIn/" + name + "1");
 
 		List<Hotel> list = JsonConverter.convertFromJson(response.asString());
 		
@@ -112,16 +112,23 @@ public class RESTFulTasksTest {
 		List<Hotel> result = hotelDao.readListByName(names, "IN");
 
 		System.out.println(result.size());
-//		Assert.assertFalse(result.isEmpty());
+		Assert.assertFalse(result.isEmpty());
 
 	}
 
-//	@Test
+	@Test
 	public void task3CheckOut() throws JsonSyntaxException, UnsupportedEncodingException {
-		Response response = given().contentType("application/json").then().body("name", equalTo(name))
+		Response response = given().contentType("application/json").accept("application/json").then()
 				.statusCode(HttpStatus.SC_OK).when().get("task3CheckOut/" + name + "1");
 
-		List<Hotel> list = fromJson(response.asString());
+		List<Hotel> list = JsonConverter.convertFromJson(response.asString());
+		
+		List<String> names = Lambda.extract(list, on(Hotel.class).getName());
+
+		List<Hotel> result = hotelDao.readListByName(names, "OUT");
+
+		System.out.println(result.size());
+		Assert.assertFalse(result.isEmpty());
 
 	}
 
