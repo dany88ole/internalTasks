@@ -1,14 +1,14 @@
+com\internal\tasks\dao\OfficeDao.class
 com\internal\tasks\util\InitDatabase.class
 com\internal\tasks\clients\ClientTask1CheckIn.class
 com\internal\tasks\clients\ClientTask3CheckIn.class
 com\internal\tasks\util\HibernateUtil.class
 com\internal\tasks\clients\ClientTask2CheckIn.class
-com\internal\tasks\util\HotelDeserializer.class
-com\internal\tasks\beans\Hotel.class
+com\internal\tasks\util\OfficeDeserializer.class
 com\internal\tasks\util\JsonConverter$1.class
 com\internal\tasks\clients\ClientTask1CheckOut.class
 com\internal\tasks\util\JsonConverter.class
-com\internal\tasks\dao\HotelDao.class
+com\internal\tasks\beans\Office.class
 com\internal\tasks\clients\ClientTask2CheckOut.class
 com\internal\tasks\service\TasksService.class
 com\internal\tasks\clients\ClientTask3CheckOut.class

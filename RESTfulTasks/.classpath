@@ -54,4 +54,10 @@
   <classpathentry kind="var" path="M2_REPO/org/apache/commons/commons-lang3/3.3.2/commons-lang3-3.3.2.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/jayway/restassured/xml-path/2.4.1/xml-path-2.4.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/codehaus/groovy/groovy-all/2.4.1/groovy-all-2.4.1.jar"/>
+  <classpathentry kind="var" path="M2_REPO/info/cukes/cucumber-java/1.2.4/cucumber-java-1.2.4.jar"/>
+  <classpathentry kind="var" path="M2_REPO/info/cukes/cucumber-core/1.2.4/cucumber-core-1.2.4.jar"/>
+  <classpathentry kind="var" path="M2_REPO/info/cukes/cucumber-html/0.2.3/cucumber-html-0.2.3.jar"/>
+  <classpathentry kind="var" path="M2_REPO/info/cukes/cucumber-jvm-deps/1.0.5/cucumber-jvm-deps-1.0.5.jar"/>
+  <classpathentry kind="var" path="M2_REPO/info/cukes/gherkin/2.12.2/gherkin-2.12.2.jar"/>
+  <classpathentry kind="var" path="M2_REPO/info/cukes/cucumber-junit/1.2.4/cucumber-junit-1.2.4.jar"/>
 </classpath>

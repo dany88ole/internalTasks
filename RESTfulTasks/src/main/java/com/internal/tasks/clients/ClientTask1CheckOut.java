@@ -18,15 +18,10 @@ public class ClientTask1CheckOut {
 			Client client = Client.create(clientConfig);
 			WebResource webResource = client.resource("http://localhost:8080/RESTfulTasks/rest/tasks/task1CheckOut");
 			ClientResponse response = webResource.accept("application/json").type("application/json")
-					.post(ClientResponse.class, "CUSTOMER");
+					.post(ClientResponse.class, "EMPLOYEE1");
 
 			if (response.getStatus() != HttpStatus.SC_OK) {
-
-				if (response.getStatus() == HttpStatus.SC_CONFLICT) {
-					throw new RuntimeException("DUPLICATE NAME INTO DB - VIOLATE CONSTRAINT");
-				} else {
-					throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
-				}
+				throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
 			}
 
 			String output = response.getEntity(String.class);

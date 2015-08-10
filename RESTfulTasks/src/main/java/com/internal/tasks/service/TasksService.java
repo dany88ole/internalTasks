@@ -18,21 +18,21 @@ import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpStatus;
 
-import com.internal.tasks.beans.Hotel;
-import com.internal.tasks.dao.HotelDao;
+import com.internal.tasks.beans.Office;
+import com.internal.tasks.dao.OfficeDao;
 import com.internal.tasks.util.JsonConverter;
 
 @Path("/tasks")
 public class TasksService {
 
-	private HotelDao dao = new HotelDao();
+	private OfficeDao dao = new OfficeDao();
 
 	@POST
 	@Consumes("application/json")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/task1CheckIn")
 	public Response task1CheckIn(String input) {
-		Hotel output = new Hotel();
+		Office output = new Office();
 		output.setName(input);
 		output.setTime(getSystemStringDate());
 		output.setOperation("IN");
@@ -54,7 +54,7 @@ public class TasksService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/task1CheckOut")
 	public Response task1CheckOut(String input) {
-		Hotel output = new Hotel();
+		Office output = new Office();
 		output.setName(input);
 		output.setTime(getSystemStringDate());
 		output.setOperation("OUT");
@@ -76,7 +76,7 @@ public class TasksService {
 	@Path("/task2CheckIn/{inputCollection}")
 	public Response task2CheckIn(@PathParam("inputCollection") String inputJson) throws Exception {
 
-		List<Hotel> collection = JsonConverter.convertFromJson(inputJson);
+		List<Office> collection = JsonConverter.convertFromJson(inputJson);
 		try {
 			collection = dao.saveCollection(collection);
 
@@ -93,7 +93,7 @@ public class TasksService {
 	@Path("/task2CheckOut/{inputCollection}")
 	public Response task2CheckOut(@PathParam("inputCollection") String inputJson) throws Exception {
 
-		List<Hotel> collection = JsonConverter.convertFromJson(inputJson);
+		List<Office> collection = JsonConverter.convertFromJson(inputJson);
 
 		try {
 			collection = dao.saveCollection(collection);
@@ -112,7 +112,7 @@ public class TasksService {
 	public Response task3CheckIn(@PathParam("name") String name) throws Exception {
 
 		// Retrive data from DB
-		List<Hotel> item = dao.read(name, "IN");
+		List<Office> item = dao.read(name, "IN");
 		System.out.println("******* RETRIVED *******");
 
 		return Response.status(HttpStatus.SC_OK).entity(JsonConverter.convertToJson(item)).build();
@@ -124,7 +124,7 @@ public class TasksService {
 	public Response task3CheckOut(@PathParam("name") String name) throws Exception {
 
 		// Retrive data from DB
-		List<Hotel> item = dao.read(name, "OUT");
+		List<Office> item = dao.read(name, "OUT");
 		System.out.println("******* RETRIVED *******");
 
 		return Response.status(HttpStatus.SC_OK).entity(JsonConverter.convertToJson(item)).build();

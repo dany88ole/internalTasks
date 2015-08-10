@@ -1,13 +1,13 @@
 C:\Users\danilo.sica\workspace\.gitconfig\RESTfulTasks\src\main\java\com\internal\tasks\util\HibernateUtil.java
 C:\Users\danilo.sica\workspace\.gitconfig\RESTfulTasks\src\main\java\com\internal\tasks\util\InitDatabase.java
-C:\Users\danilo.sica\workspace\.gitconfig\RESTfulTasks\src\main\java\com\internal\tasks\util\HotelDeserializer.java
 C:\Users\danilo.sica\workspace\.gitconfig\RESTfulTasks\src\main\java\com\internal\tasks\clients\ClientTask2CheckOut.java
 C:\Users\danilo.sica\workspace\.gitconfig\RESTfulTasks\src\main\java\com\internal\tasks\clients\ClientTask3CheckIn.java
 C:\Users\danilo.sica\workspace\.gitconfig\RESTfulTasks\src\main\java\com\internal\tasks\clients\ClientTask3CheckOut.java
 C:\Users\danilo.sica\workspace\.gitconfig\RESTfulTasks\src\main\java\com\internal\tasks\clients\ClientTask2CheckIn.java
-C:\Users\danilo.sica\workspace\.gitconfig\RESTfulTasks\src\main\java\com\internal\tasks\dao\HotelDao.java
+C:\Users\danilo.sica\workspace\.gitconfig\RESTfulTasks\src\main\java\com\internal\tasks\util\OfficeDeserializer.java
 C:\Users\danilo.sica\workspace\.gitconfig\RESTfulTasks\src\main\java\com\internal\tasks\clients\ClientTask1CheckOut.java
-C:\Users\danilo.sica\workspace\.gitconfig\RESTfulTasks\src\main\java\com\internal\tasks\beans\Hotel.java
+C:\Users\danilo.sica\workspace\.gitconfig\RESTfulTasks\src\main\java\com\internal\tasks\dao\OfficeDao.java
+C:\Users\danilo.sica\workspace\.gitconfig\RESTfulTasks\src\main\java\com\internal\tasks\beans\Office.java
 C:\Users\danilo.sica\workspace\.gitconfig\RESTfulTasks\src\main\java\com\internal\tasks\service\TasksService.java
 C:\Users\danilo.sica\workspace\.gitconfig\RESTfulTasks\src\main\java\com\internal\tasks\util\JsonConverter.java
 C:\Users\danilo.sica\workspace\.gitconfig\RESTfulTasks\src\main\java\com\internal\tasks\clients\ClientTask1CheckIn.java

@@ -20,7 +20,7 @@ public class ClientTask3CheckOut {
 			clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
 			Client client = Client.create(clientConfig);
 			WebResource webResource = client.resource(
-					"http://localhost:8080/RESTfulTasks/rest/tasks/task3CheckOut/" + URLEncoder.encode("CLIENT0", "UTF-8"));
+					"http://localhost:8080/RESTfulTasks/rest/tasks/task3CheckOut/" + URLEncoder.encode("EMPLOYEE1", "UTF-8"));
 			ClientResponse response = webResource.accept("application/json").type("application/json")
 					.get(ClientResponse.class);
 

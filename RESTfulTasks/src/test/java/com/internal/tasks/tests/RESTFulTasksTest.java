@@ -19,9 +19,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.internal.tasks.beans.Hotel;
-import com.internal.tasks.dao.HotelDao;
-import com.internal.tasks.util.HotelDeserializer;
+import com.internal.tasks.beans.Office;
+import com.internal.tasks.dao.OfficeDao;
+import com.internal.tasks.util.OfficeDeserializer;
 import com.internal.tasks.util.JsonConverter;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
@@ -31,9 +31,9 @@ import ch.lambdaj.Lambda;
 public class RESTFulTasksTest {
 
 	// value TEST
-	private String name = "JUNIT";
+	private String name = "EMPLOYEE";
 
-	private HotelDao hotelDao = new HotelDao();
+	private OfficeDao OfficeDao = new OfficeDao();
 
 	@Before
 	public void setup() {
@@ -47,7 +47,7 @@ public class RESTFulTasksTest {
 		given().contentType("application/json").body(name).then().statusCode(HttpStatus.SC_OK).when()
 				.post("task1CheckIn");
 
-		List<Hotel> result = hotelDao.read(name, "IN");
+		List<Office> result = OfficeDao.read(name, "IN");
 
 		System.out.println(result.size());
 		Assert.assertFalse(result.isEmpty());
@@ -58,7 +58,7 @@ public class RESTFulTasksTest {
 		given().contentType("application/json").body(name).then().statusCode(HttpStatus.SC_OK).when()
 				.post("task1CheckOut");
 
-		List<Hotel> result = hotelDao.read(name, "OUT");
+		List<Office> result = OfficeDao.read(name, "OUT");
 
 		System.out.println(result.size());
 		Assert.assertFalse(result.isEmpty());
@@ -71,11 +71,11 @@ public class RESTFulTasksTest {
 		Response response = given().contentType("application/json").accept("application/json").then()
 				.statusCode(HttpStatus.SC_OK).when().get("task2CheckIn/" + URLEncoder.encode(inputJson, "UTF-8"));
 
-		List<Hotel> list = JsonConverter.convertFromJson(response.asString());
+		List<Office> list = JsonConverter.convertFromJson(response.asString());
 
-		List<Long> ids = Lambda.extract(list, on(Hotel.class).getName_id());
+		List<Long> ids = Lambda.extract(list, on(Office.class).getName_id());
 
-		List<Hotel> result = hotelDao.readListById(ids, "IN");
+		List<Office> result = OfficeDao.readListById(ids, "IN");
 
 		System.out.println(result.size());
 		Assert.assertFalse(result.isEmpty() && result.size() != 3);
@@ -88,11 +88,11 @@ public class RESTFulTasksTest {
 		Response response = given().contentType("application/json").accept("application/json").then()
 				.statusCode(HttpStatus.SC_OK).when().get("task2CheckOut/" + URLEncoder.encode(inputJson, "UTF-8"));
 
-		List<Hotel> list = JsonConverter.convertFromJson(response.asString());
+		List<Office> list = JsonConverter.convertFromJson(response.asString());
 
-		List<Long> ids = Lambda.extract(list, on(Hotel.class).getName_id());
+		List<Long> ids = Lambda.extract(list, on(Office.class).getName_id());
 
-		List<Hotel> result = hotelDao.readListById(ids, "OUT");
+		List<Office> result = OfficeDao.readListById(ids, "OUT");
 
 		System.out.println(result.size());
 		Assert.assertFalse(result.isEmpty() && result.size() != 3);
@@ -104,11 +104,11 @@ public class RESTFulTasksTest {
 		Response response = given().contentType("application/json").accept("application/json").then()
 				.statusCode(HttpStatus.SC_OK).when().get("task3CheckIn/" + name + "1");
 
-		List<Hotel> list = JsonConverter.convertFromJson(response.asString());
+		List<Office> list = JsonConverter.convertFromJson(response.asString());
 		
-		List<String> names = Lambda.extract(list, on(Hotel.class).getName());
+		List<String> names = Lambda.extract(list, on(Office.class).getName());
 
-		List<Hotel> result = hotelDao.readListByName(names, "IN");
+		List<Office> result = OfficeDao.readListByName(names, "IN");
 
 		System.out.println(result.size());
 		Assert.assertFalse(result.isEmpty());
@@ -120,23 +120,23 @@ public class RESTFulTasksTest {
 		Response response = given().contentType("application/json").accept("application/json").then()
 				.statusCode(HttpStatus.SC_OK).when().get("task3CheckOut/" + name + "1");
 
-		List<Hotel> list = JsonConverter.convertFromJson(response.asString());
+		List<Office> list = JsonConverter.convertFromJson(response.asString());
 		
-		List<String> names = Lambda.extract(list, on(Hotel.class).getName());
+		List<String> names = Lambda.extract(list, on(Office.class).getName());
 
-		List<Hotel> result = hotelDao.readListByName(names, "OUT");
+		List<Office> result = OfficeDao.readListByName(names, "OUT");
 
 		System.out.println(result.size());
 		Assert.assertFalse(result.isEmpty());
 
 	}
 
-	private List<Hotel> fromJson(String input) throws JsonSyntaxException, UnsupportedEncodingException {
+	private List<Office> fromJson(String input) throws JsonSyntaxException, UnsupportedEncodingException {
 
 		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(Hotel.class, new HotelDeserializer());
+		builder.registerTypeAdapter(Office.class, new OfficeDeserializer());
 		Gson gson = builder.create();
-		Type type = new TypeToken<List<Hotel>>() {
+		Type type = new TypeToken<List<Office>>() {
 		}.getType();
 
 		// JSON string to Collection
@@ -144,10 +144,10 @@ public class RESTFulTasksTest {
 	}
 
 	private String createMockCollectionJson(String operation) {
-		List<Hotel> input = new ArrayList<Hotel>();
+		List<Office> input = new ArrayList<Office>();
 
 		for (int i = 0; i < 3; i++) {
-			Hotel temp = new Hotel();
+			Office temp = new Office();
 			temp.setName(name + i);
 			temp.setTime("1" + i + i + i + "-1" + i + "-1" + i + "T2" + i + ":" + i + i + ":" + i + i);
 			temp.setOperation(operation);
@@ -156,7 +156,7 @@ public class RESTFulTasksTest {
 		return convertToJson(input);
 	}
 
-	private static String convertToJson(List<Hotel> item) {
+	private static String convertToJson(List<Office> item) {
 		Gson gson = new Gson();
 		// Convert to Json
 		return gson.toJson(item);

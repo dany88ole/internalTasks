@@ -8,9 +8,9 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
-@Table(name = "HOTEL")
+@Table(name = "OFFICE")
 @XmlRootElement
-public class Hotel {
+public class Office {
 
 	@Id
 	@GeneratedValue

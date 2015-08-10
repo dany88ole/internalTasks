@@ -7,16 +7,16 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.internal.tasks.beans.Hotel;
+import com.internal.tasks.beans.Office;
 
-public class HotelDeserializer implements JsonDeserializer<Hotel> {
+public class OfficeDeserializer implements JsonDeserializer<Office> {
 
 	@Override
-	public Hotel deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
+	public Office deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
 			throws JsonParseException {
 		final JsonObject jsonObject = json.getAsJsonObject();
 
-		Hotel object = new Hotel();
+		Office object = new Office();
 
 		
 		if (jsonObject.get("name_id") != null) {

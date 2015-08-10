@@ -28,7 +28,7 @@
         
         <property name="hbm2ddl.auto">validate</property>
  
-        <mapping class="com.internal.tasks.beans.Hotel"/>
+        <mapping class="com.internal.tasks.beans.Office"/>
  		
  		 
     </session-factory>

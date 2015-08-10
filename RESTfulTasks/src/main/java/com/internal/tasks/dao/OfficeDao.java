@@ -9,17 +9,17 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
 import com.google.gson.JsonSyntaxException;
-import com.internal.tasks.beans.Hotel;
+import com.internal.tasks.beans.Office;
 import com.internal.tasks.util.HibernateUtil;
 
-public class HotelDao {
+public class OfficeDao {
 
-	public List<Hotel> read(String name, String operation) {
+	public List<Office> read(String name, String operation) {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 
-		Criteria criteria = session.createCriteria(Hotel.class);
-		List<Hotel> item = (List<Hotel>) criteria
+		Criteria criteria = session.createCriteria(Office.class);
+		List<Office> item = (List<Office>) criteria
 				.add(Restrictions.and(Restrictions.eq("name", name), Restrictions.eq("operation", operation))).list();
 
 		session.close();
@@ -27,33 +27,33 @@ public class HotelDao {
 		return item;
 	}
 	
-	public List<Hotel> readListById(List<Long> ids, String operation) throws JsonSyntaxException, UnsupportedEncodingException {
+	public List<Office> readListById(List<Long> ids, String operation) throws JsonSyntaxException, UnsupportedEncodingException {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 		
-		Criteria criteria = session.createCriteria(Hotel.class);
+		Criteria criteria = session.createCriteria(Office.class);
 
-		List<Hotel> item = (List<Hotel>) criteria.add(Restrictions.in("name_id",ids)).list();
+		List<Office> item = (List<Office>) criteria.add(Restrictions.in("name_id",ids)).list();
 		
 		session.close();
 		
 		return item;
 	}
 	
-	public List<Hotel> readListByName(List<String> names, String operation) throws JsonSyntaxException, UnsupportedEncodingException {
+	public List<Office> readListByName(List<String> names, String operation) throws JsonSyntaxException, UnsupportedEncodingException {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 		
-		Criteria criteria = session.createCriteria(Hotel.class);
+		Criteria criteria = session.createCriteria(Office.class);
 		
-		List<Hotel> item = (List<Hotel>) criteria.add(Restrictions.and(Restrictions.in("name",names),Restrictions.eq("operation", operation))).list();
+		List<Office> item = (List<Office>) criteria.add(Restrictions.and(Restrictions.in("name",names),Restrictions.eq("operation", operation))).list();
 		
 		session.close();
 		
 		return item;
 	}
 
-	public Hotel save(Hotel object) {
+	public Office save(Office object) {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 
@@ -69,13 +69,13 @@ public class HotelDao {
 		return object;
 	}
 
-	public List<Hotel> saveCollection(List<Hotel> list) {
+	public List<Office> saveCollection(List<Office> list) {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 
 		session.beginTransaction();
 
-		for (Hotel item : list) {
+		for (Office item : list) {
 
 			Long id_name = (Long) session.save(item);
 			item.setName_id(id_name);
@@ -89,7 +89,7 @@ public class HotelDao {
 		return list;
 	}
 
-	public Hotel update(Hotel object) {
+	public Office update(Office object) {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 
@@ -104,7 +104,7 @@ public class HotelDao {
 
 	}
 
-	public void delete(Hotel output) {
+	public void delete(Office output) {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 
