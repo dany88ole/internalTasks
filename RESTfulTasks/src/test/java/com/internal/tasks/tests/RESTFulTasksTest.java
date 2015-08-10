@@ -2,7 +2,6 @@ package com.internal.tasks.tests;
 
 import static ch.lambdaj.Lambda.on;
 import static com.jayway.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
@@ -43,7 +42,7 @@ public class RESTFulTasksTest {
 		RestAssured.basePath = "/RESTfulTasks/rest/tasks/";
 	}
 
-	// @Test
+	 @Test
 	public void task1CheckIn() {
 		given().contentType("application/json").body(name).then().statusCode(HttpStatus.SC_OK).when()
 				.post("task1CheckIn");
@@ -54,7 +53,7 @@ public class RESTFulTasksTest {
 		Assert.assertFalse(result.isEmpty());
 	}
 
-	// @Test
+	 @Test
 	public void task1CheckOut() {
 		given().contentType("application/json").body(name).then().statusCode(HttpStatus.SC_OK).when()
 				.post("task1CheckOut");
@@ -65,7 +64,7 @@ public class RESTFulTasksTest {
 		Assert.assertFalse(result.isEmpty());
 	}
 
-	// @Test
+	 @Test
 	public void task2CheckIn() throws UnsupportedEncodingException {
 		String inputJson = createMockCollectionJson("IN");
 
@@ -82,7 +81,7 @@ public class RESTFulTasksTest {
 		Assert.assertFalse(result.isEmpty() && result.size() != 3);
 	}
 
-//	@Test
+	@Test
 	public void task2CheckOut() throws UnsupportedEncodingException {
 		String inputJson = createMockCollectionJson("OUT");
 
@@ -100,7 +99,7 @@ public class RESTFulTasksTest {
 
 	}
 
-//	@Test
+	@Test
 	public void task3CheckIn() throws UnsupportedEncodingException {
 		Response response = given().contentType("application/json").accept("application/json").then()
 				.statusCode(HttpStatus.SC_OK).when().get("task3CheckIn/" + name + "1");
